@@ -1,0 +1,16 @@
+{
+    "name": "expense-tracker",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/QuanTND2497/expense-tracker.git",
+    "author": "Quan Tran <xiaoziao297@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "dev:server": "cd backend && npm run dev",
+        "dev:frontend": "cd frontend && npm run dev",
+        "dev": "concurrently \"npm run dev:server\" \"npm run dev:frontend\""
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.2"
+    }
+}
