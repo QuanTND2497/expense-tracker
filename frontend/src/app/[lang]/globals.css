@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --primary: #6419e6;
+    --primary-focus: #5415c6;
+    --secondary: #d926a9;
+    --accent: #1fb2a6;
+    --neutral: #2a303c;
+    --base-100: #1d232a;
+    --base-200: #191e24;
+    --base-300: #15191e;
+}
+
+/* Dark mode styles */
+[data-theme='dark'] {
+    background-color: var(--base-100);
+    color: #ffffff;
+}
+
+/* Custom animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+}
+
+/* Form styles */
+.input-bordered {
+    @apply bg-base-200 border-base-300;
+}
+
+.input:focus {
+    @apply border-primary outline-none;
+}
+
+/* Button hover effects */
+.btn-primary:hover {
+    @apply transform scale-105 transition-transform;
+}
+
+.btn-outline:hover {
+    @apply bg-base-200;
+}
