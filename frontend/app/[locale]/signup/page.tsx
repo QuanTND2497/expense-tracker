@@ -11,6 +11,16 @@ export default async function SignupPage({
 }) {
     const { locale } = await params;
     const { t } = await initTranslations(locale);
+
+    const handleSignup = async (formData: FormData) => {
+        'use server';
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const password = formData.get('password');
+        
+        console.log(name, email, password);
+    }
+    
     return (
         <div className="min-h-screen flex">
             {/* Left Side - Form */}
@@ -69,7 +79,7 @@ export default async function SignupPage({
                         </div>
 
                         {/* Signup Form */}
-                        <form className="space-y-6">
+                        <form className="space-y-6" action={handleSignup}>
                             <div>
                                 <label className="block text-sm font-medium mb-2 text-white">
                                     {t('fullName')}
