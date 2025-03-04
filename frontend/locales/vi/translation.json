@@ -1,3 +1,22 @@
 {
-    "welcome": "Chào mừng đến với trang web của tôi"
+    "welcome": "Chào mừng đến với trang web của tôi",
+    "expenseTracker": "Quản lý chi tiêu",
+    "login": "Đăng nhập",
+    "noAccount": "Không có tài khoản?",
+    "signUp": "Đăng ký",
+    "continueWithGoogle": "Tiếp tục với Google",
+    "continueWithFacebook": "Tiếp tục với Facebook",
+    "orWithEmail": "Hoặc với email",
+    "emailAddress": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "logIn": "Đăng nhập",
+    "privacyPolicy": "Chính sách bảo mật",
+    "termsOfService": "Điều khoản dịch vụ",
+    "manageFinances": "Quản lý tài chính dễ dàng",
+    "createYourAccount": "Tạo tài khoản của bạn",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "createAccount": "Tạo tài khoản",
+    "startManagingFinances": "Bắt đầu quản lý tài chính của bạn ngay hôm nay",
+    "fullName": "Họ và tên"
+    
 }

@@ -1,3 +1,21 @@
 {
-    "welcome": "Welcome to my website"
+    "welcome": "Welcome to my website",
+    "expenseTracker": "Expense Tracker",
+    "login": "Login",
+    "noAccount": "No account?",
+    "signUp": "Sign Up",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithFacebook": "Continue with Facebook",
+    "orWithEmail": "Or with email",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "logIn": "Log In",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "manageFinances": "Manage finances easily",
+    "createYourAccount": "Create your account",
+    "alreadyHaveAccount": "Already have an account?",
+    "createAccount": "Create Account",
+    "startManagingFinances": "Start managing your finances today",
+    "fullName": "Full Name"
 }
