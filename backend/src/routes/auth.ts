@@ -7,7 +7,19 @@ const router = express.Router();
 
 router.post(
     '/login',
-    passportLocal.authenticate('local', { session: false }),
+    (req, res, next) => {
+        passportLocal.authenticate('local', (err, user, info) => {
+
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.status(401).json({ message: info.message });
+            }
+            req.user = user;
+            next();
+        })(req, res, next);
+    },
     login
 );
 

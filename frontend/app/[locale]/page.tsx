@@ -3,7 +3,7 @@ import initTranslations from '@/app/i18n';
 import LanguageChanger from '@/components/LanguageChanger';
 import TranslationsProvider from '@/components/TranslationsProvider';
 
-const i18nNamespaces = ['translation'];
+export const i18nNamespaces = ['translation'];
 
 export default async function Home({ params }: { params: { locale: string } }) {
     const { locale } = await params;

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { PrismaClient, User } from '@prisma/client';
 import ms from 'ms';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -9,8 +10,13 @@ export const login = async (req: Request, res: Response) => {
     const { email } = req.body;
 
     const user = await prisma.user.findUnique({
-        where: { email }
+        where: { email: email }
     });
+
+    if (!user) {
+        res.status(401).json({ message: 'Invalid credentials' });
+        return;
+    }
 
     const JWT_SECRET = process.env.JWT_SECRET as string;
     const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN as ms.StringValue;
@@ -23,7 +29,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const accessToken = jwt.sign(
-        { sub: user!.id, email: user!.email },
+        { user: { sub: user!.id, email: user!.email } },
         JWT_SECRET,
         {
             expiresIn: JWT_EXPIRES_IN
@@ -40,7 +46,7 @@ export const login = async (req: Request, res: Response) => {
         return;
     }
     const refreshToken = jwt.sign(
-        { sub: user!.id, email: user!.email },
+        { user: { sub: user!.id, email: user!.email } },
         JWT_REFRESH_SECRET,
         {
             expiresIn: JWT_REFRESH_EXPIRES_IN
@@ -60,6 +66,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(200).json({
         message: 'Logged in successfully',
+        user,
         accessToken
     });
 };
@@ -92,7 +99,6 @@ export const refreshToken = async (req: Request, res: Response) => {
             where: { id: decoded.sub }
         });
 
-
         if (!user || user.refreshToken !== refresh_token) {
             res.status(401).json({ message: 'Invalid refresh token' });
             return;
@@ -103,7 +109,7 @@ export const refreshToken = async (req: Request, res: Response) => {
         const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN as ms.StringValue;
 
         const accessToken = jwt.sign(
-            { sub: user.id, email: user.email },
+            { user: { sub: user.id, email: user.email } },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );

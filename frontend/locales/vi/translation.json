@@ -17,6 +17,7 @@
     "alreadyHaveAccount": "Đã có tài khoản?",
     "createAccount": "Tạo tài khoản",
     "startManagingFinances": "Bắt đầu quản lý tài chính của bạn ngay hôm nay",
-    "fullName": "Họ và tên"
-    
+    "fullName": "Họ và tên",
+    "errorOccurred": "Đã xảy ra lỗi",
+    "invalidCredentials": "Thông tin đăng nhập không hợp lệ"
 }

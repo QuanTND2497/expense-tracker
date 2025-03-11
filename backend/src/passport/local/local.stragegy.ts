@@ -8,21 +8,25 @@ const prisma = new PrismaClient();
 const passportLocal = passport.use(
     new LocalStrategy(
         { usernameField: 'email' },
-        async (email, password, done) => {
+        async (email, password, next) => {
             if (!email || !password || !email.includes('@')) {
-                return done(new Error('Email and password are required'));
+                return next(null, false, {
+                    message: 'Email and password are required'
+                });
             }
-
-            const user = await prisma.user.findUnique({ where: { email } });
+            const user = await prisma.user.findUnique({
+                where: { email }
+            });
+            
             if (!user) {
-                return done(new Error('User not found'));
+                return next(null, false, { message: 'User not found' });
             }
 
             if (!bcrypt.compareSync(password, user.password)) {
-                return done(new Error('Password is incorrect'));
+                return next(null, false, { message: 'Password is incorrect' });
             }
 
-            return done(null, user);
+            return next(null, user);
         }
     )
 );

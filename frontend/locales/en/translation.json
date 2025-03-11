@@ -17,5 +17,7 @@
     "alreadyHaveAccount": "Already have an account?",
     "createAccount": "Create Account",
     "startManagingFinances": "Start managing your finances today",
-    "fullName": "Full Name"
+    "fullName": "Full Name",
+    "errorOccurred": "An error occurred",
+    "invalidCredentials": "Invalid credentials"
 }

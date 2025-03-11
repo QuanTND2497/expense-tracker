@@ -3,6 +3,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import Link from 'next/link';
 import initTranslations from '@/app/i18n';
+import { redirect } from 'next/navigation';
+import { handleGoogleSignup, handleFacebookSignup } from '@/constant/ultil';
 
 export default async function SignupPage({
     params
@@ -17,131 +19,142 @@ export default async function SignupPage({
         const name = formData.get('name');
         const email = formData.get('email');
         const password = formData.get('password');
-        
-        console.log(name, email, password);
-    }
-    
-    return (
-        <div className="min-h-screen flex">
-            {/* Left Side - Form */}
-            <div className="w-full lg:w-1/3 p-8 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600">
-                <div className="max-w-md mx-auto h-full flex flex-col">
-                    {/* Logo and Title */}
-                    <div className="mb-12 text-center">
-                        <h1 className="text-2xl font-bold text-white mb-2">
-                            {t('expenseTracker')}
-                        </h1>
-                    </div>
 
-                    {/* Main Content */}
-                    <div className="flex-grow flex flex-col justify-center">
-                        <h2 className="text-3xl font-bold text-white mb-2">
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
+            {
+                method: 'POST',
+                body: JSON.stringify({ name, email, password }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        const data = await response.json();
+        if (response.ok) {
+            redirect('/login');
+        }
+        return data;
+    };
+
+    return (
+        <div className="overflow-hidden flex bg-base-200 w-full">
+            {/* Left Side - Form */}
+            <div className="w-full lg:w-1/3 p-8 overflow-y-auto">
+                <div className="card bg-base-100 shadow-xl max-w-md mx-auto">
+                    <div className="card-body">
+                        {/* Logo and Title */}
+                        <div className="text-center mb-8">
+                            <h1 className="text-2xl font-bold">
+                                {t('expenseTracker')}
+                            </h1>
+                        </div>
+
+                        <h2 className="card-title text-3xl mb-2">
                             {t('createYourAccount')}
                         </h2>
-                        <p className="text-blue-100 mb-8">
-                            {t('alreadyHaveAccount')}
-                            <Link
-                                href="/login"
-                                className="text-white hover:underline font-medium"
-                            >
+                        <p className="text-base-content/70 mb-8">
+                            {t('alreadyHaveAccount')}{' '}
+                            <Link href="/login" className="link link-primary">
                                 {t('logIn')}
                             </Link>
                         </p>
 
-                        {/* Social Login Buttons */}
+                        {/* Social Signup Buttons */}
                         <div className="space-y-4 mb-8">
                             <button
                                 type="button"
-                                className="animate-button social-google w-full bg-white text-gray-700 rounded-lg px-6 py-3 flex items-center justify-center font-medium shadow-lg hover:shadow-xl"
+                                onClick={handleGoogleSignup}
+                                className="btn btn-outline w-full gap-2"
                             >
-                                <FcGoogle className="mr-3 text-xl" />
+                                <FcGoogle className="text-xl" />
                                 {t('continueWithGoogle')}
                             </button>
                             <button
                                 type="button"
-                                className="animate-button social-facebook w-full text-white rounded-lg px-6 py-3 flex items-center justify-center font-medium shadow-lg hover:shadow-xl"
+                                onClick={handleFacebookSignup}
+                                className="btn btn-primary w-full gap-2"
                             >
-                                <FaFacebook className="mr-3 text-xl" />
+                                <FaFacebook className="text-xl" />
                                 {t('continueWithFacebook')}
                             </button>
                         </div>
 
                         {/* Divider */}
-                        <div className="relative my-8">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-blue-200/30"></div>
-                            </div>
-                            <div className="relative flex justify-center text-sm">
-                                <span className="px-4 text-white bg-blue-500 rounded-full">
-                                    {t('orWithEmail')}
-                                </span>
-                            </div>
-                        </div>
+                        <div className="divider">{t('orWithEmail')}</div>
 
                         {/* Signup Form */}
-                        <form className="space-y-6" action={handleSignup}>
-                            <div>
-                                <label className="block text-sm font-medium mb-2 text-white">
-                                    {t('fullName')}
+                        <form className="space-y-4" action={handleSignup}>
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text">
+                                        {t('fullName')}
+                                    </span>
                                 </label>
                                 <input
                                     type="text"
                                     name="name"
-                                    className="form-input-animated w-full px-4 py-3 bg-white/10 border border-blue-200/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all text-white placeholder-blue-100"
                                     placeholder="John Doe"
+                                    className="input input-bordered w-full"
                                     required
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-2 text-white">
-                                    {t('emailAddress')}
+
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text">
+                                        {t('emailAddress')}
+                                    </span>
                                 </label>
                                 <input
                                     type="email"
                                     name="email"
-                                    className="form-input-animated w-full px-4 py-3 bg-white/10 border border-blue-200/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all text-white placeholder-blue-100"
                                     placeholder="name@example.com"
+                                    className="input input-bordered w-full"
                                     required
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-2 text-white">
-                                    {t('password')}
+
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text">
+                                        {t('password')}
+                                    </span>
+                                    <span className="label-text-alt text-base-content/70">
+                                        {t('minimumChars')}
+                                    </span>
                                 </label>
                                 <input
                                     type="password"
                                     name="password"
-                                    className="form-input-animated w-full px-4 py-3 bg-white/10 border border-blue-200/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all text-white placeholder-blue-100"
                                     placeholder="••••••••"
+                                    className="input input-bordered w-full"
                                     required
                                     minLength={8}
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                className="animate-button white-bg w-full bg-white text-blue-600 rounded-lg px-6 py-3 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {t('createAccount')}
-                            </button>
+                            <div className="form-control mt-6">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary w-full"
+                                >
+                                    {t('createAccount')}
+                                </button>
+                            </div>
                         </form>
 
-                        {/* Footer Links */}
-                        <div className="mt-8 text-sm text-blue-100 text-center">
-                            <a
-                                href="#"
-                                className="hover:text-white transition-colors"
-                            >
+                        {/* Terms and Privacy */}
+                        <p className="text-sm text-base-content/70 text-center mt-6">
+                            {t('bySigningUp')}{' '}
+                            <a href="#" className="link link-primary">
+                                {t('termsOfService')}
+                            </a>{' '}
+                            {t('and')}{' '}
+                            <a href="#" className="link link-primary">
                                 {t('privacyPolicy')}
                             </a>
-                            {' • '}
-                            <a
-                                href="#"
-                                className="hover:text-white transition-colors"
-                            >
-                                {t('termsOfService')}
-                            </a>
-                        </div>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -155,14 +168,16 @@ export default async function SignupPage({
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-8 bg-black/50 rounded-2xl">
-                        <h2 className="text-4xl font-bold text-white mb-4">
-                            {t('expenseTracker')}
-                        </h2>
-                        <p className="text-xl text-blue-100">
-                            {t('startManagingFinances')}
-                        </p>
+                <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm bg-base-300/50">
+                    <div className="card bg-base-100 bg-opacity-90 max-w-md">
+                        <div className="card-body text-center">
+                            <h2 className="card-title text-4xl justify-center mb-4">
+                                {t('expenseTracker')}
+                            </h2>
+                            <p className="text-xl text-base-content/80">
+                                {t('startManagingFinances')}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
