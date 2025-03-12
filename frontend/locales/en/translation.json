@@ -19,5 +19,14 @@
     "startManagingFinances": "Start managing your finances today",
     "fullName": "Full Name",
     "errorOccurred": "An error occurred",
-    "invalidCredentials": "Invalid credentials"
+    "invalidCredentials": "Invalid credentials",
+    "authenticating": "Authenticating...",
+    "loginSuccessful": "Login successful!",
+    "authenticationFailed": "Authentication failed",
+    "signIn": "Sign In",
+    "loading": "Loading...",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign Out"
 }

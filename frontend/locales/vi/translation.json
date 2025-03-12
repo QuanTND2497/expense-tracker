@@ -19,5 +19,14 @@
     "startManagingFinances": "Bắt đầu quản lý tài chính của bạn ngay hôm nay",
     "fullName": "Họ và tên",
     "errorOccurred": "Đã xảy ra lỗi",
-    "invalidCredentials": "Thông tin đăng nhập không hợp lệ"
+    "invalidCredentials": "Thông tin đăng nhập không hợp lệ",
+    "authenticating": "Đang xác thực...",
+    "loginSuccessful": "Đăng nhập thành công!",
+    "authenticationFailed": "Xác thực thất bại",
+    "signIn": "Đăng nhập",
+    "loading": "Đang tải...",
+    "logout": "Đăng xuất",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "signOut": "Đăng xuất"
 }

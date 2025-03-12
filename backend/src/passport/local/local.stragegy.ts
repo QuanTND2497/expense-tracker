@@ -17,12 +17,12 @@ const passportLocal = passport.use(
             const user = await prisma.user.findUnique({
                 where: { email }
             });
-            
+
             if (!user) {
                 return next(null, false, { message: 'User not found' });
             }
 
-            if (!bcrypt.compareSync(password, user.password)) {
+            if (!bcrypt.compareSync(password, user.password || '')) {
                 return next(null, false, { message: 'Password is incorrect' });
             }
 

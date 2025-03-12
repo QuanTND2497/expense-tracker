@@ -109,7 +109,7 @@ export const refreshToken = async (req: Request, res: Response) => {
         const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN as ms.StringValue;
 
         const accessToken = jwt.sign(
-            { user: { sub: user.id, email: user.email } },
+            { user: { sub: user.id, email: user.email, avatar: user.avatar } },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );
@@ -132,4 +132,60 @@ export const refreshToken = async (req: Request, res: Response) => {
         res.status(401).json({ message: 'Invalid refresh token', error });
         return;
     }
+};
+
+// Handle social login (Google, Facebook) callback
+export const socialLogin = async (req: Request, res: Response) => {
+    const user = req.user as User;
+    
+    if (!user) {
+        return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    const JWT_SECRET = process.env.JWT_SECRET as string;
+    const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN as ms.StringValue;
+    const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET as string;
+    const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN as ms.StringValue;
+
+    if (!JWT_SECRET || !JWT_EXPIRES_IN || !JWT_REFRESH_SECRET || !JWT_REFRESH_EXPIRES_IN) {
+        return res.status(500).json({
+            message: 'JWT configuration is not set properly'
+        });
+    }
+
+    // Generate tokens
+    const accessToken = jwt.sign(
+        { user: { 
+            sub: user.id, 
+            email: user.email,
+            avatar: user.avatar // Ensure avatar is included
+        }},
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    const refreshToken = jwt.sign(
+        {
+            user: { sub: user.id, email: user.email, avatar: user.avatar }
+        },
+        JWT_REFRESH_SECRET,
+        { expiresIn: JWT_REFRESH_EXPIRES_IN }
+    );
+
+    // Update user with tokens
+    await prisma.user.update({
+        where: { id: user.id },
+        data: { refreshToken, accessToken }
+    });
+
+    // Set refresh token cookie
+    res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: ms(JWT_EXPIRES_IN)
+    });
+
+    // Redirect to frontend with success
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendUrl}/auth/success?token=${accessToken}`);
 };

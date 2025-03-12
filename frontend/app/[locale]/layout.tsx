@@ -2,11 +2,10 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/components/SessionProvider';
-import Header from '@/components/Header';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import { i18nNamespaces } from './page';
 import initTranslations from '../i18n';
-
+import Layout from '@/components/Layout';
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin']
@@ -43,9 +42,8 @@ export default async function RootLayout({
                         namespaces={i18nNamespaces}
                         resources={resources}
                     >
-                        <Header />
-                        <main className="flex flex-col items-center justify-center h-full w-full mx-auto container">
-                            {children}
+                        <main className="h-full w-full">
+                            <Layout>{children}</Layout>
                         </main>
                     </TranslationsProvider>
                 </SessionProvider>

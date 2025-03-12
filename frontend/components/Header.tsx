@@ -1,14 +1,13 @@
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import anime from 'animejs';
 import { usePathname } from 'next/navigation';
+import UserAuthStatus from './UserAuthStatus';
 
 export default function Header() {
-    const { data: session, status } = useSession();
     const { t } = useTranslation();
     const pathname = usePathname();
 
@@ -23,22 +22,10 @@ export default function Header() {
         });
     }, []);
 
-    const handleSignOut = async () => {
-        // Animate sign out button when clicked
-        anime({
-            targets: '.signout-btn',
-            scale: [1, 0.9, 1],
-            duration: 300,
-            easing: 'easeInOutQuad'
-        });
-
-        await signOut({ redirect: true, callbackUrl: '/login' });
-    };
-
     return (
         pathname !== '/login' &&
         pathname !== '/signup' && (
-            <header className="header-container">
+            <header className="header-container h-16">
                 <div className="navbar bg-base-300/50 backdrop-blur-md shadow-lg">
                     <div className="navbar-start">
                         <Link href="/" className="btn btn-ghost text-xl gap-2">
@@ -61,77 +48,7 @@ export default function Header() {
                     </div>
 
                     <div className="navbar-end">
-                        {status === 'loading' && (
-                            <span className="loading loading-spinner loading-md text-primary"></span>
-                        )}
-
-                        {status === 'authenticated' && session?.user && (
-                            <div className="dropdown dropdown-end">
-                                <div
-                                    tabIndex={0}
-                                    role="button"
-                                    className="btn btn-ghost btn-circle avatar placeholder"
-                                >
-                                    <div
-                                        style={{
-                                            display: 'flex'
-                                        }}
-                                        className="bg-primary text-primary-content rounded-full w-10 items-center justify-center"
-                                    >
-                                        <span className="text-xl">
-                                            {session.user.name
-                                                ?.charAt(0)
-                                                .toUpperCase() ||
-                                                session.user.email
-                                                    ?.charAt(0)
-                                                    .toUpperCase()}
-                                        </span>
-                                    </div>
-                                </div>
-                                <ul
-                                    tabIndex={0}
-                                    className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52"
-                                >
-                                    <li className="menu-title px-4 py-2 font-medium">
-                                        {session.user.name ||
-                                            session.user.email}
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="/profile"
-                                            className="justify-between"
-                                        >
-                                            {t('profile')}
-                                            <span className="badge badge-primary badge-sm">
-                                                New
-                                            </span>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/settings">
-                                            {t('settings')}
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <button
-                                            onClick={handleSignOut}
-                                            className="text-error"
-                                        >
-                                            {t('signOut')}
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-
-                        {status === 'unauthenticated' && (
-                            <Link
-                                href="/login"
-                                className="btn btn-primary btn-sm"
-                            >
-                                {t('signIn')}
-                            </Link>
-                        )}
+                        <UserAuthStatus />
                     </div>
                 </div>
             </header>

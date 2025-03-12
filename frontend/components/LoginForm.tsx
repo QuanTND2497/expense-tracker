@@ -39,7 +39,6 @@ export default function LoginForm() {
                 password,
                 redirect: false
             });
-            console.log('result', result);
 
             if (result?.error) {
                 setError(t('invalidCredentials'));

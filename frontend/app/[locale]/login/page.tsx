@@ -1,19 +1,17 @@
 import Image from 'next/image';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
 import Link from 'next/link';
 import initTranslations from '@/app/i18n';
 import LoginForm from '@/components/LoginForm';
 import TranslationsProvider from '@/components/TranslationsProvider';
 import { i18nNamespaces } from '../page';
-import { handleGoogleSignup, handleFacebookSignup } from '@/constant/ultil';
+import SocialLoginButtons from '@/components/SocialLoginButtons';
 
 export default async function LoginPage({
     params
 }: {
     params: { locale: string };
 }) {
-    const { locale } = params;
+    const { locale } = await params;
     const { t, resources } = await initTranslations(locale);
 
     return (
@@ -40,24 +38,13 @@ export default async function LoginPage({
                         </p>
 
                         {/* Social Login Buttons */}
-                        <div className="space-y-4 mb-8">
-                            <button
-                                type="button"
-                                onClick={handleGoogleSignup}
-                                className="btn btn-outline w-full"
-                            >
-                                <FcGoogle className="text-xl" />
-                                {t('continueWithGoogle')}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleFacebookSignup}
-                                className="btn btn-primary w-full"
-                            >
-                                <FaFacebook className="text-xl" />
-                                {t('continueWithFacebook')}
-                            </button>
-                        </div>
+                        <TranslationsProvider
+                            namespaces={i18nNamespaces}
+                            locale={locale}
+                            resources={resources}
+                        >
+                            <SocialLoginButtons />
+                        </TranslationsProvider>
 
                         {/* Divider */}
                         <div className="divider">{t('orWithEmail')}</div>

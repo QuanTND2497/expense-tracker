@@ -4,8 +4,6 @@ import { FaFacebook } from 'react-icons/fa';
 import Link from 'next/link';
 import initTranslations from '@/app/i18n';
 import { redirect } from 'next/navigation';
-import { handleGoogleSignup, handleFacebookSignup } from '@/constant/ultil';
-
 export default async function SignupPage({
     params
 }: {
@@ -64,7 +62,6 @@ export default async function SignupPage({
                         <div className="space-y-4 mb-8">
                             <button
                                 type="button"
-                                onClick={handleGoogleSignup}
                                 className="btn btn-outline w-full gap-2"
                             >
                                 <FcGoogle className="text-xl" />
@@ -72,7 +69,6 @@ export default async function SignupPage({
                             </button>
                             <button
                                 type="button"
-                                onClick={handleFacebookSignup}
                                 className="btn btn-primary w-full gap-2"
                             >
                                 <FaFacebook className="text-xl" />
