@@ -3,7 +3,7 @@ import Link from 'next/link';
 import initTranslations from '@/app/i18n';
 import LoginForm from '@/components/LoginForm';
 import TranslationsProvider from '@/components/TranslationsProvider';
-import { i18nNamespaces } from '../page';
+import { i18nNamespaces } from '../../(MainModule)/page';
 import SocialLoginButtons from '@/components/SocialLoginButtons';
 
 export default async function LoginPage({

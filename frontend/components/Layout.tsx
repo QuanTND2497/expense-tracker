@@ -1,21 +1,19 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
 import Header from './Header';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
-
+export default function Layout({
+    children,
+    isHeader = true
+}: {
+    children: React.ReactNode;
+    isHeader?: boolean;
+}) {
     return (
         <>
-            <Header />
+            {isHeader && <Header />}
             <div
                 className="w-full h-full flex flex-col items-center justify-center mx-auto container "
                 style={{
-                    height:
-                        pathname === '/login' || pathname === '/signup'
-                            ? '100%'
-                            : 'var(--header-height)'
+                    height: !isHeader ? '100%' : 'var(--header-height)'
                 }}
             >
                 {children}

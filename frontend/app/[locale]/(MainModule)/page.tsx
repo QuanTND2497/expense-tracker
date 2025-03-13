@@ -2,11 +2,22 @@ import Image from 'next/image';
 import initTranslations from '@/app/i18n';
 import LanguageChanger from '@/components/LanguageChanger';
 import TranslationsProvider from '@/components/TranslationsProvider';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export const i18nNamespaces = ['translation'];
 
 export default async function Home({ params }: { params: { locale: string } }) {
     const { locale } = await params;
+
+    // Kiểm tra đăng nhập bằng cookie hoặc session
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('next-auth.session-token')?.value;
+
+    // Nếu không có token, chuyển hướng đến trang đăng nhập
+    if (!authToken) {
+        redirect(`/${locale}/login`);
+    }
 
     const { t, resources } = await initTranslations(locale);
 

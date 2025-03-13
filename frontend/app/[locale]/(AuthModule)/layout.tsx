@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import SessionProvider from '@/components/SessionProvider';
 import TranslationsProvider from '@/components/TranslationsProvider';
-import { i18nNamespaces } from './page';
-import initTranslations from '../i18n';
+import initTranslations from '../../i18n';
 import Layout from '@/components/Layout';
+import { i18nNamespaces } from '../(MainModule)/page';
+import '../../globals.css';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin']
@@ -30,7 +32,14 @@ export default async function RootLayout({
 }) {
     const { locale } = await params;
     const { resources } = await initTranslations(locale);
+    // Kiểm tra đăng nhập bằng cookie hoặc session
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('next-auth.session-token')?.value;
 
+    // Nếu có token, chuyển hướng đến trang chủ
+    if (authToken) {
+        redirect(`/${locale}`);
+    }
     return (
         <html lang={locale} data-theme="dark" className="h-full">
             <body
@@ -43,7 +52,7 @@ export default async function RootLayout({
                         resources={resources}
                     >
                         <main className="h-full w-full">
-                            <Layout>{children}</Layout>
+                            <Layout isHeader={false}>{children}</Layout>
                         </main>
                     </TranslationsProvider>
                 </SessionProvider>
