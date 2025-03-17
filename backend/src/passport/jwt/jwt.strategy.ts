@@ -12,7 +12,7 @@ const jwtStrategy = passport.use(
         },
         async (jwt_payload, done) => {
             const user = await prisma.user.findUnique({
-                where: { id: jwt_payload.sub }
+                where: { id: jwt_payload.user.sub }
             });
 
             if (!user) {
@@ -27,6 +27,7 @@ const jwtStrategy = passport.use(
 // Thêm middleware này sau khi xác thực JWT
 export const checkTokenValidity = async (req, res, next) => {
     const { id } = req.user;
+
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Lấy token từ header
 
