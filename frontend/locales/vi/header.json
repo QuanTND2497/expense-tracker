@@ -1,9 +1,1 @@
-{
-    "signOut": "Đăng xuất",
-    "profile": "Hồ sơ",
-    "settings": "Cài đặt",
-    "signIn": "Đăng nhập",
-    "minimumChars": "Tối thiểu 8 ký tự",
-    "bySigningUp": "Bằng cách đăng ký, bạn đồng ý với",
-    "and": "và"
-}
+{"and":"và","bySigningUp":"Bằng cách đăng ký, bạn đồng ý với","minimumChars":"Tối thiểu 8 ký tự","profile":"Hồ sơ","settings":"Cài đặt","signIn":"Đăng nhập","signOut":"Đăng xuất"}

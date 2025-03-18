@@ -1,9 +1,1 @@
-{
-    "signOut": "Sign Out",
-    "profile": "Profile",
-    "settings": "Settings",
-    "signIn": "Sign In",
-    "minimumChars": "Minimum 8 characters",
-    "bySigningUp": "By signing up, you agree to our",
-    "and": "and"
-}
+{"and":"and","bySigningUp":"By signing up, you agree to our","minimumChars":"Minimum 8 characters","profile":"Profile","settings":"Settings","signIn":"Sign In","signOut":"Sign Out"}

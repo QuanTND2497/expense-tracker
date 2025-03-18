@@ -13,7 +13,7 @@ export default function TranslationsProvider({
     children: React.ReactNode;
     locale: string;
     namespaces: string[];
-    resources: Record<string, Record<string, string>>;
+    resources?: Record<string, Record<string, string>>;
 }) {
     const i18n = createInstance();
 

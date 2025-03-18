@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import SessionProvider from '@/components/SessionProvider';
-import TranslationsProvider from '@/components/TranslationsProvider';
-import initTranslations from '../../i18n';
 import Layout from '@/components/Layout';
-import { i18nNamespaces } from '../(MainModule)/page';
 import '../../globals.css';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import TranslationsProvider from '@/providers/TranslationsProvider';
+import initTranslations from '@/app/i18n';
+import { i18nNamespaces } from '@/constant/const';
+import CookieProvider from '@/providers/CookieProvider';
+
 const geistSans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin']
@@ -45,17 +47,19 @@ export default async function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-blue-900 text-white h-full`}
             >
-                <SessionProvider>
-                    <TranslationsProvider
-                        locale={locale}
-                        namespaces={i18nNamespaces}
-                        resources={resources}
-                    >
-                        <main className="h-full w-full">
-                            <Layout isHeader={false}>{children}</Layout>
-                        </main>
-                    </TranslationsProvider>
-                </SessionProvider>
+                <CookieProvider>
+                    <SessionProvider>
+                        <TranslationsProvider
+                            namespaces={i18nNamespaces}
+                            locale={locale}
+                            resources={resources}
+                        >
+                            <main className="h-full w-full">
+                                <Layout isHeader={false}>{children}</Layout>
+                            </main>
+                        </TranslationsProvider>
+                    </SessionProvider>
+                </CookieProvider>
             </body>
         </html>
     );

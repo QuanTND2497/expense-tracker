@@ -5,7 +5,7 @@ import i18nConfig from '@/i18nConfig';
 
 export default async function initTranslations(
     locale,
-    namespaces = ['translation'],
+    namespaces = ['default'],
     i18nInstance,
     resources
 ) {
@@ -26,8 +26,8 @@ export default async function initTranslations(
         resources,
         fallbackLng: i18nConfig.defaultLocale,
         supportedLngs: i18nConfig.locales,
-        defaultNS: namespaces[0],
-        fallbackNS: namespaces[0],
+        defaultNS: namespaces?.[0],
+        fallbackNS: namespaces?.[0],
         ns: namespaces,
         preload: resources ? [] : i18nConfig.locales
     });

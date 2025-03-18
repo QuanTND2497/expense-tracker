@@ -1,16 +1,15 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import anime from 'animejs';
 import { usePathname } from 'next/navigation';
 import UserAuthStatus from './UserAuthStatus';
+import { useTranslation } from 'react-i18next';
 
 export default function Header() {
-    const { t } = useTranslation();
     const pathname = usePathname();
-
+    const { t } = useTranslation();
     useEffect(() => {
         // Animate header entrance
         anime({

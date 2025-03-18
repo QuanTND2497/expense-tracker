@@ -2,8 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import initTranslations from '@/app/i18n';
 import LoginForm from '@/components/LoginForm';
-import TranslationsProvider from '@/components/TranslationsProvider';
-import { i18nNamespaces } from '../../(MainModule)/page';
 import SocialLoginButtons from '@/components/SocialLoginButtons';
 
 export default async function LoginPage({
@@ -12,7 +10,7 @@ export default async function LoginPage({
     params: { locale: string };
 }) {
     const { locale } = await params;
-    const { t, resources } = await initTranslations(locale);
+    const { t } = await initTranslations(locale);
 
     return (
         <div className="overflow-hidden flex bg-base-200 w-full">
@@ -38,25 +36,14 @@ export default async function LoginPage({
                         </p>
 
                         {/* Social Login Buttons */}
-                        <TranslationsProvider
-                            namespaces={i18nNamespaces}
-                            locale={locale}
-                            resources={resources}
-                        >
-                            <SocialLoginButtons />
-                        </TranslationsProvider>
+
+                        <SocialLoginButtons />
 
                         {/* Divider */}
                         <div className="divider">{t('orWithEmail')}</div>
 
                         {/* Email Form */}
-                        <TranslationsProvider
-                            namespaces={i18nNamespaces}
-                            locale={locale}
-                            resources={resources}
-                        >
-                            <LoginForm />
-                        </TranslationsProvider>
+                        <LoginForm />
 
                         {/* Footer Links */}
                         <div className="text-sm text-base-content/70 text-center mt-8">

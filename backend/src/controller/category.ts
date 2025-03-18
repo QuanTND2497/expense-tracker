@@ -13,7 +13,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
             }
         });
 
-        res.status(200).json({ categories });
+        res.status(200).json({ data: categories });
     } catch (error) {
         console.error('Error fetching categories:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -37,7 +37,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
             return;
         }
 
-        res.status(200).json({ category });
+        res.status(200).json({ data: category });
     } catch (error) {
         console.error('Error fetching category:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -65,7 +65,7 @@ export const createCategory = async (req: Request, res: Response) => {
 
         res.status(201).json({
             message: 'Category created successfully',
-            category
+            data: category
         });
     } catch (error) {
         console.error('Error creating category:', error);
@@ -117,7 +117,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 
         res.status(200).json({
             message: 'Category updated successfully',
-            category: updatedCategory
+            data: updatedCategory
         });
     } catch (error) {
         console.error('Error updating category:', error);

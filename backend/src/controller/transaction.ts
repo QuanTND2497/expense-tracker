@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // Get all transactions for the authenticated user
 export const getAllTransactions = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         const transactions = await prisma.transaction.findMany({
             where: {
@@ -21,7 +21,7 @@ export const getAllTransactions = async (req: Request, res: Response) => {
             }
         });
 
-        res.status(200).json({ transactions });
+        res.status(200).json({ data: transactions });
     } catch (error) {
         console.error('Error fetching transactions:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -32,7 +32,7 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 export const getTransactionById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         const transaction = await prisma.transaction.findUnique({
             where: {
@@ -56,7 +56,7 @@ export const getTransactionById = async (req: Request, res: Response) => {
             return;
         }
 
-        res.status(200).json({ transaction });
+        res.status(200).json({ data: transaction });
     } catch (error) {
         console.error('Error fetching transaction:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -73,7 +73,7 @@ export const createTransaction = async (req: Request, res: Response) => {
 
     try {
         const { amount, currency, categoryId, date, description } = req.body;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         // Check if the category exists
         const category = await prisma.category.findUnique({
@@ -101,7 +101,7 @@ export const createTransaction = async (req: Request, res: Response) => {
 
         res.status(201).json({
             message: 'Transaction created successfully',
-            transaction
+            data: transaction
         });
     } catch (error) {
         console.error('Error creating transaction:', error);
@@ -120,7 +120,7 @@ export const updateTransaction = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { amount, currency, categoryId, date, description } = req.body;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         // Check if transaction exists and belongs to the user
         const existingTransaction = await prisma.transaction.findUnique({
@@ -169,7 +169,7 @@ export const updateTransaction = async (req: Request, res: Response) => {
 
         res.status(200).json({
             message: 'Transaction updated successfully',
-            transaction: updatedTransaction
+            data: updatedTransaction
         });
     } catch (error) {
         console.error('Error updating transaction:', error);
@@ -181,7 +181,7 @@ export const updateTransaction = async (req: Request, res: Response) => {
 export const deleteTransaction = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         // Check if transaction exists and belongs to the user
         const existingTransaction = await prisma.transaction.findUnique({
@@ -219,7 +219,7 @@ export const getTransactionsByDateRange = async (
 ) => {
     try {
         const { startDate, endDate } = req.query;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         if (!startDate || !endDate) {
             res.status(400).json({
@@ -244,7 +244,7 @@ export const getTransactionsByDateRange = async (
             }
         });
 
-        res.status(200).json({ transactions });
+        res.status(200).json({ data: transactions });
     } catch (error) {
         console.error('Error fetching transactions by date range:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -258,7 +258,7 @@ export const getTransactionsByCategory = async (
 ) => {
     try {
         const { categoryId } = req.params;
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
 
         // Check if the category exists
         const category = await prisma.category.findUnique({
@@ -283,7 +283,7 @@ export const getTransactionsByCategory = async (
             }
         });
 
-        res.status(200).json({ transactions });
+        res.status(200).json({ data: transactions });
     } catch (error) {
         console.error('Error fetching transactions by category:', error);
         res.status(500).json({ message: 'Server error', error });
@@ -293,7 +293,7 @@ export const getTransactionsByCategory = async (
 // Get transaction statistics
 export const getTransactionStats = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?.["id"];
+        const userId = req.user?.['id'];
         const { period } = req.query; // 'day', 'week', 'month', 'year'
 
         let startDate = new Date();
@@ -363,10 +363,12 @@ export const getTransactionStats = async (req: Request, res: Response) => {
         );
 
         res.status(200).json({
-            period,
-            total,
-            categorySummary,
-            transactionCount: transactions.length
+            data: {
+                period,
+                total,
+                categorySummary,
+                transactionCount: transactions.length
+            }
         });
     } catch (error) {
         console.error('Error fetching transaction statistics:', error);

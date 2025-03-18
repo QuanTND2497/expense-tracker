@@ -1,6 +1,6 @@
 const i18nConfig = {
     locales: ['en', 'vi'],
-    defaultLocale: 'vi',
+    defaultLocale: 'vi'
 };
 
-  module.exports = i18nConfig;
+module.exports = i18nConfig;

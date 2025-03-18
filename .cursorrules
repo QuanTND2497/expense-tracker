@@ -1,1 +1,3 @@
 always response with emojis
+translation use  { t } = useTranslation() import from 'react-i18next'
+frontend update file translate in frontend/locales, page in frontend/app/[locale]/(MainModule)/....

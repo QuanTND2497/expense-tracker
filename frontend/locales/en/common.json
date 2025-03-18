@@ -1,0 +1,15 @@
+{
+    "home": "Home",
+    "categories": "Categories",
+    "reports": "Reports",
+    "dashboard": "Dashboard",
+    "recent_expenses": "Recent Expenses",
+    "monthly_summary": "Monthly Summary",
+    "top_categories": "Top Categories",
+    "loading": "Loading...",
+    "welcome": "Welcome to Expense Tracker",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "collapse_sidebar": "Collapse sidebar",
+    "expand_sidebar": "Expand sidebar"
+}
