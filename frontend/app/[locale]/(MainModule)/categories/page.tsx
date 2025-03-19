@@ -1,7 +1,9 @@
 import { cookies } from 'next/headers';
-import { i18nNamespaces } from '@/constant/const';
 import { redirect } from 'next/navigation';
+import Categories from '@/container/categories';
+import { i18nNamespaces } from '@/constant/const';
 import initTranslations from '@/app/i18n';
+import TranslationsProvider from '@/providers/TranslationsProvider';
 
 export default async function CategoriesPage({
     params
@@ -9,6 +11,7 @@ export default async function CategoriesPage({
     params: { locale: string };
 }) {
     const { locale } = await params;
+    const { resources } = await initTranslations(locale, ['categories']);
 
     // Check authentication
     const cookieStore = await cookies();
@@ -19,18 +22,16 @@ export default async function CategoriesPage({
         redirect(`/${locale}/login`);
     }
 
-    const { t } = await initTranslations(locale, i18nNamespaces);
-
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">{t('categories')}</h1>
-
-            {/* Loading animation while categories are being fetched */}
-            <div className="flex items-center justify-center h-64">
-                <div className="relative w-24 h-24">
-                    <div className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
-                    <div className="absolute top-2 left-2 w-20 h-20 rounded-full border-4 border-secondary border-b-transparent animate-spin"></div>
-                </div>
+        <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="bg-base-100/50 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-base-300">
+                <TranslationsProvider
+                    namespaces={['categories', ...i18nNamespaces]}
+                    locale={locale}
+                    resources={resources}
+                >
+                    <Categories />
+                </TranslationsProvider>
             </div>
         </div>
     );

@@ -81,3 +81,36 @@ body {
 .form-success {
     animation: success-scale 0.5s ease forwards;
 }
+
+/* Theme transition */
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+    transition: all 0.3s ease-in-out !important;
+    transition-delay: 0 !important;
+}
+
+/* DaisyUI theme overrides for light mode */
+[data-theme='light'] {
+    --primary-content: #ffffff;
+    --base-100: #ffffff;
+    --base-200: #f2f2f2;
+    --base-300: #e6e6e6;
+    --base-content: #1f2937;
+    --neutral-content: #1f2937;
+    background-image: linear-gradient(to bottom right, #f8fafc, #bfdbfe);
+    color: #1f2937;
+}
+
+/* DaisyUI theme overrides for dark mode */
+[data-theme='dark'] {
+    --primary-content: #ffffff;
+    --base-100: #1f2937;
+    --base-200: #111827;
+    --base-300: #0f172a;
+    --base-content: #f3f4f6;
+    --neutral-content: #f3f4f6;
+    background-image: linear-gradient(to bottom right, #1e293b, #1e3a8a);
+    color: #f3f4f6;
+}

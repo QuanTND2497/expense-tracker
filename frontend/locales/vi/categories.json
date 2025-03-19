@@ -1,1 +1,15 @@
-{"addNew":"Thêm mới","cancel":"Hủy","createTitle":"Tạo danh mục","delete":"Xóa","deleteConfirm":"Bạn có chắc chắn muốn xóa danh mục này không?","description":"Mô tả","edit":"Sửa","editTitle":"Sửa danh mục","name":"Tên","title":"Danh mục"}
+{
+    "addNew": "Thêm mới",
+    "cancel": "Hủy",
+    "createTitle": "Tạo danh mục",
+    "delete": "Xóa",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa danh mục này không?",
+    "description": "Sắp xếp chi tiêu của bạn bằng cách tạo các danh mục phù hợp với thói quen chi tiêu",
+    "descriptionPlaceholder": "Nhập thông tin chi tiết về danh mục này",
+    "edit": "Sửa",
+    "editTitle": "Sửa danh mục",
+    "empty": "Không tìm thấy danh mục nào. Thêm danh mục đầu tiên của bạn để bắt đầu!",
+    "name": "Tên",
+    "namePlaceholder": "Ví dụ: Thực phẩm, Tiện ích, Giải trí",
+    "title": "Danh mục"
+}

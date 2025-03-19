@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import SessionProvider from '@/components/SessionProvider';
+import SessionProvider from '@/providers/SessionProvider';
 import Layout from '@/components/Layout';
 import '../../globals.css';
 import { cookies } from 'next/headers';
@@ -9,6 +9,7 @@ import TranslationsProvider from '@/providers/TranslationsProvider';
 import initTranslations from '@/app/i18n';
 import { i18nNamespaces } from '@/constant/const';
 import CookieProvider from '@/providers/CookieProvider';
+import Script from 'next/script';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -43,9 +44,31 @@ export default async function RootLayout({
         redirect(`/${locale}`);
     }
     return (
-        <html lang={locale} data-theme="dark" className="h-full">
+        <html lang={locale} className="h-full" suppressHydrationWarning>
+            <head>
+                <Script id="theme-script-auth" strategy="beforeInteractive">
+                    {`
+                    (function() {
+                        try {
+                            const savedTheme = localStorage.getItem('theme');
+                            if (savedTheme) {
+                                document.documentElement.setAttribute('data-theme', savedTheme);
+                            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                                document.documentElement.setAttribute('data-theme', 'light');
+                            } else {
+                                document.documentElement.setAttribute('data-theme', 'dark');
+                            }
+                        } catch (e) {
+                            console.error('Error applying theme:', e);
+                            document.documentElement.setAttribute('data-theme', 'dark');
+                        }
+                    })();
+                    `}
+                </Script>
+            </head>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-gray-900 to-blue-900 text-white h-full`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
+                suppressHydrationWarning
             >
                 <CookieProvider>
                     <SessionProvider>

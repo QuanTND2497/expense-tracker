@@ -126,15 +126,16 @@ export default function Sidebar({ locale }: { locale: string }) {
                     className="drawer-toggle"
                 />
                 <div className="drawer-content">
-                    {/* Mobile toggle button */}
+                    {/* Mobile toggle button - Moved to the top-right corner with proper z-index and margin */}
                     <label
                         htmlFor="sidebar-drawer"
-                        className="drawer-button btn btn-primary btn-sm fixed top-4 left-4 z-10"
+                        className="drawer-button btn btn-circle btn-primary btn-sm fixed top-4 left-4 z-50"
+                        style={{ marginTop: '3.5rem' }}
                     >
                         <Bars3Icon className="h-5 w-5" />
                     </label>
                 </div>
-                <div className="drawer-side">
+                <div className="drawer-side z-[51]">
                     <label
                         htmlFor="sidebar-drawer"
                         className="drawer-overlay"

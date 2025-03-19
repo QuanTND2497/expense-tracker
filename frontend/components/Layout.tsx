@@ -31,7 +31,9 @@ export default function Layout({
                     {isHeader && <Sidebar locale={locale} />}
 
                     {/* Main content */}
-                    <div className="flex-1 overflow-auto">{children}</div>
+                    <div className="flex-1 overflow-auto h-full flex items-center justify-center">
+                        {children}
+                    </div>
                 </div>
             </div>
         </CookiesProvider>
