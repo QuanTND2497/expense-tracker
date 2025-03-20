@@ -47,7 +47,7 @@ export default function CategoryForm({
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={onClose}></div>
+            <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm" onClick={onClose}></div>
             <AnimatePresence>
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}

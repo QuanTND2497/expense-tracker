@@ -37,28 +37,11 @@ export default function CategoryList({
         setCategoryToDelete(null);
     };
 
-    // Function to get a random accent color class for category cards
-    const getRandomAccentColor = (id: string) => {
-        const colors = [
-            'from-primary to-secondary',
-            'from-secondary to-accent',
-            'from-accent to-primary',
-            'from-primary/80 to-secondary/80',
-            'from-secondary/80 to-accent/80'
-        ];
-        // Use the hash of the id to select a consistent color for each category
-        const hash = id
-            .split('')
-            .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        return colors[hash % colors.length];
-    };
-
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
                     {categories.map((category) => {
-                        const gradientClass = getRandomAccentColor(category.id);
                         return (
                             <motion.div
                                 key={category.id}
@@ -114,7 +97,7 @@ export default function CategoryList({
             {categoryToDelete && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div
-                        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+                        className="fixed inset-0  bg-opacity-50 backdrop-blur-sm"
                         onClick={cancelDelete}
                     ></div>
                     <AnimatePresence>

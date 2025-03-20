@@ -1,0 +1,131 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { fetchAPI } from '@/utils/api';
+import { TRANSACTION_API } from '@/constant/const';
+import { Transaction } from '@/constant/interfaces';
+import { AxiosResponse } from 'axios';
+import { useTranslation } from 'react-i18next';
+import { showToast, showErrorToast, showSuccessToast } from '@/utils/toast';
+
+// Import components
+import TransactionHeader from '@/components/transactions/TransactionHeader';
+import TransactionList from '@/components/transactions/TransactionList';
+import TransactionForm from '@/components/transactions/TransactionForm';
+import TransactionLoading from '@/components/transactions/TransactionLoading';
+
+export default function Transactions() {
+    const { t } = useTranslation(['transactions', 'common']);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+
+    const fetchTransactions = async () => {
+        try {
+            setIsLoading(true);
+            const transactionsResponse = await fetchAPI<AxiosResponse<Transaction[]>>(TRANSACTION_API);
+            setTransactions(transactionsResponse.data);
+        } catch (error: unknown) {
+            console.error('Lỗi khi lấy danh sách giao dịch:', error);
+            showErrorToast(t('transactions:error_fetching'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleSubmit = async (formData: {
+        amount: string;
+        description: string;
+        date: string;
+        categoryId: string;
+        currency?: string;
+    }) => {
+        try {
+            const url = editingTransaction
+                ? `${TRANSACTION_API}/${editingTransaction.id}`
+                : TRANSACTION_API;
+            const method = editingTransaction ? 'PUT' : 'POST';
+
+            const response = await fetchAPI(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            showSuccessToast(
+                editingTransaction
+                    ? t('transactions:transaction_updated')
+                    : t('transactions:transaction_created')
+            );
+            setIsModalOpen(false);
+            setEditingTransaction(null);
+            fetchTransactions();
+        } catch (error: unknown) {
+            console.error('Lỗi khi lưu giao dịch:', error);
+            showErrorToast(t('transactions:error_saving'));
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            await fetchAPI(`${TRANSACTION_API}/${id}`, {
+                method: 'DELETE'
+            });
+
+            showSuccessToast(t('transactions:transaction_deleted'));
+            fetchTransactions();
+        } catch (error: unknown) {
+            console.error('Lỗi khi xóa giao dịch:', error);
+            showErrorToast(t('transactions:error_deleting'));
+        }
+    };
+
+    const openEditModal = (transaction: Transaction) => {
+        setEditingTransaction(transaction);
+        setIsModalOpen(true);
+    };
+
+    const handleAddNew = () => {
+        setEditingTransaction(null);
+        setIsModalOpen(true);
+    };
+
+    const handleRefresh = () => {
+        fetchTransactions();
+    };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+
+    return (
+        <>
+            {isLoading ? (
+                <TransactionLoading />
+            ) : (
+                <>
+                    <TransactionHeader 
+                        onAddNew={handleAddNew} 
+                        onRefresh={handleRefresh} 
+                    />
+
+                    <TransactionList
+                        transactions={transactions}
+                        onEdit={openEditModal}
+                        onDelete={handleDelete}
+                    />
+
+                    <TransactionForm
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onSubmit={handleSubmit}
+                        editingTransaction={editingTransaction}
+                    />
+                </>
+            )}
+        </>
+    );
+} 

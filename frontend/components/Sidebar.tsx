@@ -7,7 +7,8 @@ import {
     ChartPieIcon,
     HomeIcon,
     ChevronRightIcon,
-    Bars3Icon
+    Bars3Icon,
+    CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +29,7 @@ export default function Sidebar({ locale }: { locale: string }) {
 
     const menuItems = [
         { name: t('home'), icon: HomeIcon, href: `/${locale}` },
+        { name: t('transactions'), icon: CurrencyDollarIcon, href: `/${locale}/transactions` },
         { name: t('categories'), icon: TagIcon, href: `/${locale}/categories` },
         { name: t('reports'), icon: ChartPieIcon, href: `/${locale}/reports` }
     ];

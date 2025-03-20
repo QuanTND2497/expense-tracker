@@ -10,8 +10,9 @@ import { dir } from 'i18next';
 import { i18nNamespaces } from '@/constant/const';
 import CookieProvider from '@/providers/CookieProvider';
 import Script from 'next/script';
-import { ToastProvider } from '@/providers/ToastProvider';
 import { PageLoadingProvider } from '@/providers/PageLoadingProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -73,6 +74,18 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
                 suppressHydrationWarning
             >
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
                 <CookieProvider>
                     <SessionProvider>
                         <TranslationsProvider
@@ -81,11 +94,9 @@ export default async function RootLayout({
                             resources={resources}
                         >
                             <PageLoadingProvider>
-                                <ToastProvider>
-                                    <main className="h-full w-full">
-                                        <Layout>{children}</Layout>
-                                    </main>
-                                </ToastProvider>
+                                <main className="h-full w-full">
+                                    <Layout>{children}</Layout>
+                                </main>
                             </PageLoadingProvider>
                         </TranslationsProvider>
                     </SessionProvider>

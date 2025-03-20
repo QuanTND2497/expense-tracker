@@ -19,7 +19,7 @@ export default function CategoryHeader({ onAddNew }: CategoryHeaderProps) {
                         {t('title')}
                     </h1>
                     <p className="text-base-content/70 mt-2">
-                        {t('description')}
+                        {t('descriptionTitle')}
                     </p>
                 </div>
                 <motion.button
