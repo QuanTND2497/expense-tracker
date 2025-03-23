@@ -8,13 +8,16 @@ import {
     Bars3Icon,
     CurrencyDollarIcon,
     Squares2X2Icon,
+    SparklesIcon
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { usePageLoading } from '@/providers/PageLoadingProvider';
 
 export default function Sidebar({ locale }: { locale: string }) {
     const { t } = useTranslation('common');
     const pathname = usePathname();
+    const { setLoading } = usePageLoading();
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -52,6 +55,24 @@ export default function Sidebar({ locale }: { locale: string }) {
         }
     }
 
+    const handleNavigation = (href: string, e: React.MouseEvent) => {
+        // Don't show loading or navigate if we're already on this page
+        if (href === `/${locale}` && pathname === '/') {
+            e.preventDefault();
+            setLoading(false);
+            return;
+        }
+
+        if (href.includes(pathname) && pathname !== '/') {
+            e.preventDefault();
+            setLoading(false);
+            return;
+        }
+
+        // Otherwise, set loading state and save the path we're navigating to
+        setLoading(true);
+    };
+
     function SidebarContent() {
         return (
             <div className="h-full bg-[#1a1d27] text-gray-300 w-64">
@@ -83,19 +104,24 @@ export default function Sidebar({ locale }: { locale: string }) {
                 {/* Menu */}
                 <ul className="menu p-2 pt-4 w-full">
                     {menuItems.map((item, index) => {
-                        const isActive = pathname === item.href;
+                        const isActive =
+                            item.href.includes(pathname) &&
+                            (pathname !== '/' ||
+                                (item.href === `/${locale}` &&
+                                    pathname === '/'));
                         return (
                             <li key={index}>
                                 <Link
                                     href={item.href}
-                                    className={
+                                    className={`flex items-center transition-all duration-200 ${
                                         isActive
-                                            ? 'active bg-blue-600/20 text-blue-400'
-                                            : ''
-                                    }
-                                    onClick={
-                                        isMobile ? closeSidebar : undefined
-                                    }
+                                            ? 'active bg-blue-600/20 text-blue-400 font-medium'
+                                            : 'hover:bg-gray-700/30 hover:text-white'
+                                    }`}
+                                    onClick={(e) => {
+                                        if (isMobile) closeSidebar();
+                                        handleNavigation(item.href, e);
+                                    }}
                                 >
                                     <item.icon className="h-5 w-5" />
                                     {item.name}
