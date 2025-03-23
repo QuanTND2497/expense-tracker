@@ -11,7 +11,9 @@ import {
     CalendarIcon,
     CurrencyDollarIcon,
     TagIcon,
-    DocumentTextIcon
+    DocumentTextIcon,
+    ArrowTrendingUpIcon,
+    ArrowTrendingDownIcon
 } from '@heroicons/react/24/outline';
 
 interface TransactionFormProps {
@@ -22,18 +24,27 @@ interface TransactionFormProps {
         description: string;
         date: string;
         categoryId: string;
-        currency?: string;
+        currency: string;
+        type: 'income' | 'expense';
     }) => Promise<void>;
     editingTransaction: Transaction | null;
+    initialData?: {
+        amount: number;
+        description: string;
+        date: string;
+        currency: string;
+        type: 'income' | 'expense';
+    };
 }
 
 export default function TransactionForm({
     isOpen,
     onClose,
     onSubmit,
-    editingTransaction
+    editingTransaction,
+    initialData
 }: TransactionFormProps) {
-    const { t } = useTranslation(['transactions', 'common']);
+    const { t } = useTranslation(['transactions']);
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [formData, setFormData] = useState({
@@ -41,7 +52,8 @@ export default function TransactionForm({
         description: '',
         date: new Date().toISOString().split('T')[0],
         categoryId: '',
-        currency: 'VND' // Mặc định là VND
+        currency: 'VND', // Mặc định là VND
+        type: 'expense' as 'income' | 'expense' // Mặc định là chi tiêu
     });
     const [displayAmount, setDisplayAmount] = useState('');
     const [errors, setErrors] = useState({
@@ -71,12 +83,12 @@ export default function TransactionForm({
         }
     }, [isOpen]);
 
-    // Cập nhật form data khi có giao dịch cần chỉnh sửa
+    // Cập nhật form data khi có giao dịch cần chỉnh sửa hoặc dữ liệu ban đầu
     useEffect(() => {
         if (editingTransaction) {
             const amount = editingTransaction.amount || '';
             setFormData({
-                amount: amount,
+                amount: amount.toString(),
                 description: editingTransaction.description || '',
                 date: editingTransaction.date
                     ? new Date(editingTransaction.date)
@@ -84,60 +96,76 @@ export default function TransactionForm({
                           .split('T')[0]
                     : new Date().toISOString().split('T')[0],
                 categoryId: (editingTransaction.categoryId || '') as string,
-                currency: editingTransaction.currency || 'VND'
+                currency: editingTransaction.currency || 'VND',
+                type: editingTransaction.type || 'expense'
             });
-            
+
             // Cập nhật giá trị hiển thị với định dạng số
-            setDisplayAmount(formatNumberInput(amount));
+            setDisplayAmount(formatNumberInput(amount.toString()));
+        } else if (initialData) {
+            // Sử dụng dữ liệu từ hóa đơn đã quét
+            setFormData({
+                amount: initialData.amount.toString(),
+                description: initialData.description || '',
+                date:
+                    initialData.date || new Date().toISOString().split('T')[0],
+                categoryId: '', // Người dùng sẽ chọn danh mục
+                currency: initialData.currency || 'VND',
+                type: initialData.type || 'expense'
+            });
+
+            // Cập nhật giá trị hiển thị với định dạng số
+            setDisplayAmount(formatNumberInput(initialData.amount.toString()));
         } else {
             setFormData({
                 amount: '',
                 description: '',
                 date: new Date().toISOString().split('T')[0],
                 categoryId: '',
-                currency: 'VND'
+                currency: 'VND',
+                type: 'expense'
             });
             setDisplayAmount('');
         }
-    }, [editingTransaction]);
+    }, [editingTransaction, initialData]);
 
     // Hàm định dạng số với dấu phân cách hàng nghìn
     const formatNumberInput = (value: string): string => {
         if (!value) return '';
-        
+
         // Loại bỏ tất cả ký tự không phải số và dấu chấm
         const numericValue = value.replace(/[^\d.-]/g, '');
-        
+
         // Nếu là chuỗi rỗng hoặc chỉ có dấu chấm, trả về nguyên giá trị
         if (!numericValue || numericValue === '.') return numericValue;
-        
+
         // Tách phần nguyên và phần thập phân
         const parts = numericValue.split('.');
-        
+
         // Định dạng phần nguyên với dấu phân cách hàng nghìn
         const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        
+
         // Nếu có phần thập phân, ghép lại với phần nguyên
         if (parts.length > 1) {
             return `${integerPart}.${parts[1]}`;
         }
-        
+
         return integerPart;
     };
 
     // Xử lý khi người dùng nhập số tiền
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        
+
         // Loại bỏ tất cả ký tự không phải số và dấu chấm
         const numericValue = value.replace(/[^\d.-]/g, '');
-        
+
         // Cập nhật giá trị thực cho form data
         setFormData({
             ...formData,
             amount: numericValue
         });
-        
+
         // Cập nhật giá trị hiển thị với định dạng
         setDisplayAmount(formatNumberInput(numericValue));
     };
@@ -205,6 +233,57 @@ export default function TransactionForm({
                             : t('transactions:add_transaction')}
                     </h3>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Loại giao dịch */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-base font-medium">
+                                    {t('transactions:transaction_type')}
+                                </span>
+                            </label>
+                            <div className="flex gap-2">
+                                <label className="flex-1">
+                                    <input
+                                        type="radio"
+                                        name="type"
+                                        className="hidden peer"
+                                        checked={formData.type === 'income'}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                type: 'income'
+                                            })
+                                        }
+                                    />
+                                    <div className="flex items-center justify-center gap-2 p-3 border border-base-300 rounded-lg cursor-pointer peer-checked:border-success peer-checked:bg-success/10 hover:bg-base-300/30 transition-all">
+                                        <ArrowTrendingUpIcon className="h-5 w-5 text-success" />
+                                        <span className="font-medium">
+                                            {t('transactions:income')}
+                                        </span>
+                                    </div>
+                                </label>
+                                <label className="flex-1">
+                                    <input
+                                        type="radio"
+                                        name="type"
+                                        className="hidden peer"
+                                        checked={formData.type === 'expense'}
+                                        onChange={() =>
+                                            setFormData({
+                                                ...formData,
+                                                type: 'expense'
+                                            })
+                                        }
+                                    />
+                                    <div className="flex items-center justify-center gap-2 p-3 border border-base-300 rounded-lg cursor-pointer peer-checked:border-error peer-checked:bg-error/10 hover:bg-base-300/30 transition-all">
+                                        <ArrowTrendingDownIcon className="h-5 w-5 text-error" />
+                                        <span className="font-medium">
+                                            {t('transactions:expense')}
+                                        </span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
                         {/* Số tiền */}
                         <div className="form-control">
                             <label className="label">

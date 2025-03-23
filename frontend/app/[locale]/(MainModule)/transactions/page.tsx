@@ -11,7 +11,10 @@ export default async function TransactionsPage({
     params: { locale: string };
 }) {
     const { locale } = await params;
-    const { resources } = await initTranslations(locale, ['transactions']);
+    const { resources } = await initTranslations(locale, [
+        'transactions',
+        ...i18nNamespaces
+    ]);
 
     // Kiểm tra xác thực
     const cookieStore = await cookies();

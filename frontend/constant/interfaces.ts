@@ -1,14 +1,15 @@
 export interface Transaction {
-    id: string;
-    name: string;
-    description: string;
-    amount: string;
+    _id: string;
+    amount: number;
     currency: string;
+    categoryId: string;
+    category?: Category;
     date: string;
+    description?: string;
     userId: string;
-    categoryId: string | Category;
     createdAt: string;
     updatedAt: string;
+    type: 'income' | 'expense';
 }
 
 export interface Category {
@@ -20,3 +21,9 @@ export interface Category {
     updatedAt: string;
 }
 
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    token: string;
+}

@@ -6,10 +6,12 @@ import {
     PencilIcon,
     TrashIcon,
     CurrencyDollarIcon,
-    CalendarIcon
+    CalendarIcon,
+    ArrowTrendingUpIcon,
+    ArrowTrendingDownIcon
 } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
-import { Category, Transaction } from '@/constant/interfaces';
+import { Transaction } from '@/constant/interfaces';
 import { formatCurrency, formatDate } from '@/utils/format';
 
 interface TransactionListProps {
@@ -27,7 +29,7 @@ export default function TransactionList({
     const [transactionToDelete, setTransactionToDelete] = useState<
         string | null
     >(null);
-    
+
     const currentLocale = i18n.language;
 
     const handleDeleteClick = (id: string) => {
@@ -45,10 +47,25 @@ export default function TransactionList({
         setTransactionToDelete(null);
     };
 
-    // Hàm để xác định màu dựa trên số tiền (dương hoặc âm)
-    const getAmountColorClass = (amount: string) => {
-        const numAmount = parseFloat(amount);
+    // Hàm để xác định màu dựa trên loại giao dịch (thu nhập hoặc chi tiêu)
+    const getAmountColorClass = (type: string, amount: number | string) => {
+        if (type === 'income') return 'text-success';
+        if (type === 'expense') return 'text-error';
+
+        // Fallback dựa vào số tiền nếu không có loại giao dịch
+        const numAmount =
+            typeof amount === 'string' ? parseFloat(amount) : amount;
         return numAmount >= 0 ? 'text-success' : 'text-error';
+    };
+
+    // Hàm để lấy icon tương ứng với loại giao dịch
+    const getTransactionTypeIcon = (type: string) => {
+        if (type === 'income')
+            return <ArrowTrendingUpIcon className="h-4 w-4 text-success" />;
+        if (type === 'expense')
+            return <ArrowTrendingDownIcon className="h-4 w-4 text-error" />;
+
+        return <CurrencyDollarIcon className="h-4 w-4 text-base-content/50" />;
     };
 
     if (transactions.length === 0) {
@@ -71,6 +88,7 @@ export default function TransactionList({
                             <th>{t('transactions:date')}</th>
                             <th>{t('transactions:description')}</th>
                             <th>{t('transactions:category')}</th>
+                            <th>{t('transactions:transaction_type')}</th>
                             <th className="text-right">
                                 {t('transactions:amount')}
                             </th>
@@ -81,9 +99,9 @@ export default function TransactionList({
                     </thead>
                     <tbody>
                         <AnimatePresence>
-                            {transactions.map((transaction) => (
+                            {transactions.map((transaction, index) => (
                                 <motion.tr
-                                    key={transaction.id}
+                                    key={`${transaction._id}-${index}`}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
@@ -94,19 +112,32 @@ export default function TransactionList({
                                         <div className="flex items-center space-x-2">
                                             <CalendarIcon className="h-4 w-4 text-base-content/50" />
                                             <span>
-                                                {formatDate(transaction.date, currentLocale)}
+                                                {formatDate(
+                                                    transaction.date,
+                                                    currentLocale
+                                                )}
                                             </span>
                                         </div>
                                     </td>
                                     <td className="font-medium">
                                         {transaction.description}
                                     </td>
+                                    <td>{transaction.category?.name || '-'}</td>
                                     <td>
-                                        {(transaction.categoryId as Category)
-                                            ?.name || '-'}
+                                        <div className="flex items-center gap-1.5">
+                                            {getTransactionTypeIcon(
+                                                transaction.type
+                                            )}
+                                            <span>
+                                                {t(
+                                                    `transactions:${transaction.type}`
+                                                )}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td
                                         className={`text-right font-semibold ${getAmountColorClass(
+                                            transaction.type,
                                             transaction.amount
                                         )}`}
                                     >
@@ -136,7 +167,7 @@ export default function TransactionList({
                                                 whileTap={{ scale: 0.9 }}
                                                 onClick={() =>
                                                     handleDeleteClick(
-                                                        transaction.id
+                                                        transaction._id
                                                     )
                                                 }
                                                 className="btn btn-xs btn-ghost text-error hover:bg-error/10"
@@ -180,20 +211,20 @@ export default function TransactionList({
                             <h3 className="font-bold text-xl mb-6 text-error">
                                 {t('transactions:confirm_delete')}
                             </h3>
-                            <div className="flex justify-end gap-3 mt-8">
+                            <div className="flex justify-end space-x-3">
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    onClick={cancelDelete}
                                     className="btn btn-ghost"
+                                    onClick={cancelDelete}
                                 >
                                     {t('common:cancel')}
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    onClick={confirmDelete}
                                     className="btn btn-error"
+                                    onClick={confirmDelete}
                                 >
                                     {t('common:delete')}
                                 </motion.button>

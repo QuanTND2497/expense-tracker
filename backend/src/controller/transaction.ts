@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 export const getAllTransactions = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.['id'];
-
         const transactions = await prisma.transaction.findMany({
             where: {
                 userId
@@ -72,16 +71,18 @@ export const createTransaction = async (req: Request, res: Response) => {
     }
 
     try {
-        const { amount, currency, categoryId, date, description } = req.body;
+        const {
+            amount,
+            currency,
+            categoryId,
+            date,
+            description,
+            type = 'expense'
+        } = req.body;
         const userId = req.user?.['id'];
 
-        // Check if the category exists
-        const category = await prisma.category.findUnique({
-            where: { id: categoryId }
-        });
-
-        if (!category) {
-            res.status(404).json({ message: 'Category not found' });
+        if (!userId) {
+            res.status(401).json({ message: 'Unauthorized' });
             return;
         }
 
@@ -92,20 +93,18 @@ export const createTransaction = async (req: Request, res: Response) => {
                 categoryId,
                 date: new Date(date),
                 description,
-                userId: userId as string
+                userId,
+                type
             },
             include: {
                 category: true
             }
         });
 
-        res.status(201).json({
-            message: 'Transaction created successfully',
-            data: transaction
-        });
+        res.status(201).json({ data: transaction });
     } catch (error) {
         console.error('Error creating transaction:', error);
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).json({ message: 'Error creating transaction' });
     }
 };
 
@@ -119,10 +118,16 @@ export const updateTransaction = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params;
-        const { amount, currency, categoryId, date, description } = req.body;
+        const { amount, currency, categoryId, date, description, type } =
+            req.body;
         const userId = req.user?.['id'];
 
-        // Check if transaction exists and belongs to the user
+        if (!userId) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
+        // Verify the transaction belongs to the user
         const existingTransaction = await prisma.transaction.findUnique({
             where: { id }
         });
@@ -134,46 +139,32 @@ export const updateTransaction = async (req: Request, res: Response) => {
 
         if (existingTransaction.userId !== userId) {
             res.status(403).json({
-                message: 'Unauthorized access to this transaction'
+                message: 'Not authorized to update this transaction'
             });
             return;
         }
 
-        // Check if the category exists
-        if (categoryId) {
-            const category = await prisma.category.findUnique({
-                where: { id: categoryId }
-            });
+        const updateData: any = {};
 
-            if (!category) {
-                res.status(404).json({ message: 'Category not found' });
-                return;
-            }
-        }
+        if (amount !== undefined) updateData.amount = parseFloat(amount);
+        if (currency !== undefined) updateData.currency = currency;
+        if (categoryId !== undefined) updateData.categoryId = categoryId;
+        if (date !== undefined) updateData.date = new Date(date);
+        if (description !== undefined) updateData.description = description;
+        if (type !== undefined) updateData.type = type;
 
-        // Update transaction
-        const updatedTransaction = await prisma.transaction.update({
+        const transaction = await prisma.transaction.update({
             where: { id },
-            data: {
-                amount: amount ? parseFloat(amount) : undefined,
-                currency,
-                categoryId,
-                date: date ? new Date(date) : undefined,
-                description,
-                updatedAt: new Date()
-            },
+            data: updateData,
             include: {
                 category: true
             }
         });
 
-        res.status(200).json({
-            message: 'Transaction updated successfully',
-            data: updatedTransaction
-        });
+        res.status(200).json({ data: transaction });
     } catch (error) {
         console.error('Error updating transaction:', error);
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).json({ message: 'Error updating transaction' });
     }
 };
 

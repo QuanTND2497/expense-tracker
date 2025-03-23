@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-    TagIcon,
-    ChartPieIcon,
     HomeIcon,
     ChevronRightIcon,
     Bars3Icon,
-    CurrencyDollarIcon
+    CurrencyDollarIcon,
+    Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -28,10 +27,21 @@ export default function Sidebar({ locale }: { locale: string }) {
     }, []);
 
     const menuItems = [
-        { name: t('home'), icon: HomeIcon, href: `/${locale}` },
-        { name: t('transactions'), icon: CurrencyDollarIcon, href: `/${locale}/transactions` },
-        { name: t('categories'), icon: TagIcon, href: `/${locale}/categories` },
-        { name: t('reports'), icon: ChartPieIcon, href: `/${locale}/reports` }
+        {
+            name: t('common:home'),
+            href: `/${locale}`,
+            icon: HomeIcon
+        },
+        {
+            name: t('common:categories'),
+            href: `/${locale}/categories`,
+            icon: Squares2X2Icon
+        },
+        {
+            name: t('common:transactions'),
+            href: `/${locale}/transactions`,
+            icon: CurrencyDollarIcon
+        }
     ];
 
     function closeSidebar() {

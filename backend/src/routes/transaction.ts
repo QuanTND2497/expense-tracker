@@ -79,7 +79,11 @@ router.post(
         body('description')
             .optional()
             .isString()
-            .withMessage('Description must be a string')
+            .withMessage('Description must be a string'),
+        body('type')
+            .optional()
+            .isIn(['income', 'expense'])
+            .withMessage('Type must be either "income" or "expense"')
     ],
     createTransaction
 );
@@ -105,7 +109,11 @@ router.put(
         body('description')
             .optional()
             .isString()
-            .withMessage('Description must be a string')
+            .withMessage('Description must be a string'),
+        body('type')
+            .optional()
+            .isIn(['income', 'expense'])
+            .withMessage('Type must be either "income" or "expense"')
     ],
     updateTransaction
 );

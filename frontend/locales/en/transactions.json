@@ -31,5 +31,12 @@
   "total_amount": "Total Amount",
   "error_fetching": "Error loading transactions",
   "error_saving": "Error saving transaction",
-  "error_deleting": "Error deleting transaction"
+  "error_deleting": "Error deleting transaction",
+  "transaction_type": "Transaction Type",
+  "income": "Income",
+  "expense": "Expense",
+  "all": "All",
+  "income_only": "Income Only",
+  "expense_only": "Expense Only",
+  "filter_by_type": "Filter by Type"
 } 
