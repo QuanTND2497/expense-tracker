@@ -9,7 +9,7 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card';
-import SignupForm from '@/components/signup-form';
+import SignupForm from '@/components/form/signup-form';
 
 export const metadata: Metadata = {
     title: 'Sign Up | Expense Tracker',
