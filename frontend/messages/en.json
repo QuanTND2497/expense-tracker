@@ -1,0 +1,76 @@
+{
+    "common": {
+        "expenseTracker": "Expense Tracker",
+        "login": "Login",
+        "signUp": "Sign Up",
+        "signIn": "Sign In",
+        "logout": "Logout",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "fullName": "Full Name",
+        "forgotPassword": "Forgot Password?",
+        "rememberMe": "Remember Me",
+        "dontHaveAccount": "Don't have an account?",
+        "alreadyHaveAccount": "Already have an account?",
+        "orContinueWith": "Or continue with",
+        "orWithEmail": "Or with email",
+        "createAccount": "Create an account",
+        "enterCredentials": "Enter your credentials to continue",
+        "enterDetails": "Enter your details below",
+        "termsOfService": "Terms of Service",
+        "privacyPolicy": "Privacy Policy",
+        "and": "and",
+        "bySigningUp": "By signing up, you agree to our",
+        "loading": "Loading...",
+        "processing": "Processing...",
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "toggleTheme": "Toggle theme",
+        "language": "Language"
+    },
+    "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+    "auth": {
+        "invalidCredentials": "Invalid email or password",
+        "errorOccurred": "An error occurred. Please try again.",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "accountCreated": "Account created successfully",
+        "pleaseLogin": "Please login to continue",
+        "continueWithGoogle": "Continue with Google",
+        "continueWithFacebook": "Continue with Facebook",
+        "continueWithGithub": "Continue with GitHub"
+    },
+    "features": {
+        "manageFinances": "Manage your finances efficiently",
+        "featureTrackExpenses": "Track expenses in multiple currencies",
+        "featureCategories": "Visualize spending with intuitive reports",
+        "featureReports": "Set and manage budgets effectively",
+        "featureBudgets": "Secure cloud backup for your data",
+        "joinExpenseTracker": "Join Expense Tracker",
+        "trackAnalyzeSave": "Track, Analyze, Save"
+    },
+    "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "invalidInput": "Invalid input"
+    },
+    "currencies": {
+        "selectCurrency": "Select currency",
+        "usd": "US Dollar (USD)",
+        "eur": "Euro (EUR)",
+        "gbp": "British Pound (GBP)",
+        "jpy": "Japanese Yen (JPY)",
+        "vnd": "Vietnamese Dong (VND)"
+    },
+    "languages": {
+        "en": "English",
+        "vi": "Vietnamese"
+    }
+}

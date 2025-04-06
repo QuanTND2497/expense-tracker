@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +14,7 @@ export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const t = useTranslations();
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -25,7 +27,7 @@ export default function LoginForm() {
 
         // Form validation
         if (!email || !password) {
-            setError('Please fill in all fields');
+            setError(t('validation.required'));
             setIsLoading(false);
             return;
         }
@@ -40,7 +42,7 @@ export default function LoginForm() {
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.message || 'Authentication failed');
+                throw new Error(data.message || t('auth.invalidCredentials'));
             }
 
             // Redirect to dashboard on success
@@ -48,7 +50,7 @@ export default function LoginForm() {
             router.refresh();
         } catch (err) {
             console.error('Login error:', err);
-            setError(err instanceof Error ? err.message : 'Failed to login');
+            setError(err instanceof Error ? err.message : t('auth.errorOccurred'));
         } finally {
             setIsLoading(false);
         }
@@ -64,7 +66,7 @@ export default function LoginForm() {
             )}
 
             <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('common.email')}</Label>
                 <Input
                     id="email"
                     name="email"
@@ -80,7 +82,13 @@ export default function LoginForm() {
 
             <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t('common.password')}</Label>
+                    <a 
+                        href="/forgot-password" 
+                        className="text-sm text-primary underline underline-offset-4 hover:text-primary/80"
+                    >
+                        {t('common.forgotPassword')}
+                    </a>
                 </div>
                 <Input
                     id="password"
@@ -95,10 +103,10 @@ export default function LoginForm() {
                 {isLoading ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Signing in...
+                        {t('common.loading')}
                     </>
                 ) : (
-                    'Sign In'
+                    t('common.signIn')
                 )}
             </Button>
         </form>
