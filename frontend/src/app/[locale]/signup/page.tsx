@@ -131,7 +131,7 @@ export default function SignupPage() {
                 <div className="lg:p-8">
                     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px]">
                         <div className="flex flex-col space-y-2 text-center">
-                            <h1 className="text-2xl font-semibold tracking-tight">
+                            <h1 className="text-xl font-semibold tracking-tight">
                                 {t('common.createAccount')}
                             </h1>
                             <p className="text-sm text-muted-foreground">
@@ -141,7 +141,7 @@ export default function SignupPage() {
 
                         <Card>
                             <CardHeader className="space-y-1">
-                                <CardTitle className="text-xl">{t('common.signUp')}</CardTitle>
+                                <CardTitle className="text-lg">{t('common.signUp')}</CardTitle>
                                 <CardDescription>
                                     {t('features.manageFinances')}
                                 </CardDescription>

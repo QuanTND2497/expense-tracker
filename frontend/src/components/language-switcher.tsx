@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { Check, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
     const onSelectLocale = (newLocale: string) => {
         // Remove the current locale from the path
         const newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
-
+        
         startTransition(() => {
             router.push(newPathname);
         });
@@ -50,9 +50,6 @@ export function LanguageSwitcher() {
                         onCheckedChange={() => onSelectLocale(loc.value)}
                     >
                         {t(`languages.${loc.value}`)}
-                        {locale === loc.value && (
-                            <Check className="ml-2 h-4 w-4" />
-                        )}
                     </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>
